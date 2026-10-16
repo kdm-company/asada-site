@@ -1,0 +1,108 @@
+/* ===================================================
+  works.css
+  - 事例紹介ページ専用スタイル（モバイルファースト）
+=================================================== */
+
+/* --- ピックアップ --- */
+.works-pickup__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.works-pickup__item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: var(--color-bg-blue);
+  border-radius: 16px;
+}
+
+.works-pickup__thumb {
+  overflow: hidden;
+  border-radius: 10px;
+  background: var(--color-white);
+}
+
+.works-pickup__thumb img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.works-pickup__body {
+  flex: 1;
+}
+
+.works-pickup__label {
+  font-family: var(--font-en);
+  font-size: 1.3rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--color-main);
+  margin-bottom: 6px;
+}
+
+.works-pickup__title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.works-pickup__text {
+  font-size: 1.4rem;
+  line-height: 1.9;
+}
+
+/* --- カテゴリー製品グリッド --- */
+.works-cat__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.works-cat__item {
+}
+
+.works-cat__item img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+}
+
+/* PCも14pxのままにするため、PC側の上書きは持たせない */
+.works-cat__name {
+  padding: 6px 0;
+  font-size: 1.4rem;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .works-pickup__list {
+    flex-direction: row;
+    gap: 24px;
+  }
+
+  .works-pickup__item {
+    flex: 1;
+    flex-direction: column;
+  }
+
+  .works-cat__grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .works-cat__item img {
+    aspect-ratio: 4 / 3;
+  }
+}

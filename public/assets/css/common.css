@@ -1,0 +1,1130 @@
+/* ===================================================
+  common.css
+  - リセット / 変数 / 基本設定 / ヘッダー・フッター・ナビ共通
+  - モバイルファースト（min-widthで拡張、max-width禁止）
+=================================================== */
+
+:root {
+  --color-main: #0b5cab;
+  --color-sub: #ffd23f;
+  --color-text: #1a1a1a;
+  --color-bg-blue: #f5fafe; /* 薄水色：ニュースbg/worksボーダー/CTAbg等に統一 */
+  --color-bg-light: var(--color-bg-blue);
+  --color-white: #ffffff;
+  --color-border: #dbe3ec;
+  --color-works-border: var(--color-bg-blue);
+  --color-gray: #8a96a3;
+
+  --font-base: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --font-en: "Jost", sans-serif;
+
+  --width-inner: 1200px;
+  /* コンテナの左右余白。PCでは画面幅に応じて広がる（下のメディアクエリで上書き） */
+  --container-pad: 20px;
+  /* 左右padding込みの外枠幅。中身が常に--width-innerを超えず、狭い画面では余白が残る */
+  --width-outer: calc(var(--width-inner) + var(--container-pad) * 2);
+  --header-height-sp: 75px;
+  --header-height-pc: 90px;
+
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@property --btn-ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* --- reset --- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+  background: var(--color-white);
+}
+
+body {
+  font-family: var(--font-base);
+  font-size: 1.4rem; /* SP基本：14px。14px以外のみ個別指定 */
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-white);
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: bottom;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* スマホメニュー展開時の背面スクロールロック */
+body.is-menu-open {
+  overflow: hidden;
+}
+
+/* キーボード操作時のフォーカス表示。マウス操作では出ない */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-main);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* 濃色の上では白い輪郭にする */
+.gnav__item--contact a:focus-visible,
+.cta__item:focus-visible,
+.form-btn:focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* ===================================================
+  フェードイン
+  JSが .js を付けた環境でのみ隠す。JS無効時は最初から見える
+=================================================== */
+
+/* スクロールで出すセクション */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  will-change: opacity, transform;
+}
+
+/* 下層のページ見出しとパンくず。読み込み直後に出すので動きは小さめに。
+   --reveal-delay はJSが並び順に応じて設定する（見出し→パンくずの順） */
+.js [data-reveal-onload] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js [data-reveal].is-revealed,
+.js [data-reveal-onload].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-reveal],
+  .js [data-reveal-onload] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* --- layout --- */
+.header__inner,
+.footer__inner,
+.service__inner,
+.works__inner,
+.news__inner {
+  width: 100%;
+  max-width: var(--width-outer);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+/* --- header（SPは追従しない。メニューボタンのみ固定） --- */
+.header {
+  position: relative;
+  width: 100%;
+  height: var(--header-height-sp);
+  background: var(--color-white);
+  z-index: 100;
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.header__logo {
+  font-size: 0;
+}
+
+.header__logo img {
+  width: 200px; /* 元サイトは160px。ロゴを大きく */
+  height: auto;
+}
+
+/* gnav: SP = 白背景フルスクリーン、opacityのみでフェードイン */
+.gnav {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-white);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s var(--ease), visibility 0.4s;
+}
+
+.is-menu-open .gnav {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* SP：gnav左上ロゴ（header__logoと完全一致） */
+.gnav__logo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  height: var(--header-height-sp);
+  padding: 0 20px;
+  z-index: 1;
+}
+
+.gnav__logo img {
+  width: 200px; /* header__logo と同じ値にそろえる */
+  height: auto;
+}
+
+.gnav__list {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  padding: calc(var(--header-height-sp) + 24px) 28px 0;
+  overflow-y: auto;
+}
+
+/* [REVERT] border-bottom: 1px solid var(--color-border); を削除し::afterで代替 */
+.gnav__list li {
+  position: relative;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.gnav__list li::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-border);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.5s var(--ease) 0.2s;
+}
+
+.is-menu-open .gnav__list li::after {
+  transform: scaleX(1);
+}
+
+/* 全アイテム同タイミングで出現（ディレイなし） */
+.is-menu-open .gnav__list li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gnav__list a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 2px;
+  overflow: hidden;
+}
+
+.gnav__list a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-main);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s var(--ease);
+}
+
+.gnav__list a:active::after {
+  transform: scaleX(1);
+}
+
+.gnav__label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+/* SP：お問い合わせの矢印は非表示（.btn-link__iconのdisplay:inline-flexより後に宣言して上書き） */
+.gnav__list .gnav__contact-icon {
+  display: none;
+}
+
+/* SP：コピーライト */
+/* [REVERT] opacity/transform/transitionを追加 */
+.gnav__copy {
+  display: block;
+  padding: 20px 28px 8px;
+  font-family: var(--font-en);
+  font-size: 1.1rem;
+  color: var(--color-gray);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s var(--ease) 0.1s, transform 0.4s var(--ease) 0.1s;
+}
+
+.is-menu-open .gnav__copy {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gnav__foot {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  overflow: hidden;
+}
+
+.gnav__wave-wrap {
+  display: flex;
+  animation: footerWaveScroll 20s linear infinite;
+}
+
+.gnav__wave {
+  display: block;
+  flex-shrink: 0;
+  width: 200vw;
+  max-width: none;
+  height: auto;
+}
+
+/* メニューボタン：丸＋縦2点（開くとX）。mix-blend-mode:differenceをfixed要素本体に付与 */
+.menu-btn {
+  position: fixed;
+  top: 16px;
+  right: 12px;
+  z-index: 200;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  mix-blend-mode: difference;
+}
+
+.menu-btn__circle {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+  border: 1.5px solid #cccccc;
+  border-radius: 50%;
+}
+
+.menu-btn__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #cccccc;
+  border-radius: 50%;
+  transition: width 0.4s var(--ease), height 0.4s var(--ease),
+              border-radius 0.4s var(--ease), transform 0.4s var(--ease);
+}
+
+.menu-btn__dot--1 {
+  transform: translate(-50%, calc(-50% - 5px));
+}
+
+.menu-btn__dot--2 {
+  transform: translate(-50%, calc(-50% + 5px));
+}
+
+.is-menu-open .menu-btn__dot {
+  width: 11px;
+  height: 1.5px;
+  border-radius: 1px;
+}
+
+.is-menu-open .menu-btn__dot--1 {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.is-menu-open .menu-btn__dot--2 {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+main {
+  padding-top: 0;
+}
+
+/* --- common parts --- */
+/* section-head は <h2> 要素そのものに付与 */
+.section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  margin-bottom: 24px;
+  font-weight: normal;
+}
+
+/* 英字を主役に大きく、和文はその下に見出しとして置く */
+.section-head__en {
+  font-family: var(--font-en);
+  font-size: 3.2rem;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-main);
+  letter-spacing: 0.04em;
+}
+
+.section-head__ja {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* テキストリンク「詳しくみる →」 font-sizeはbodyに依存（SPは14px、PCは16px自動） */
+.btn-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  gap: 14px;
+  font-weight: 700;
+  color: var(--color-main);
+}
+
+/* 「お問い合わせフォーム」の前半。PCは見出しと重複するため隠す */
+.btn-link__text-sp {
+  display: inline;
+}
+
+.btn-link__icon {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.3s ease;
+}
+
+.btn-link__icon::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  --btn-ring-angle: 0deg;
+  background: conic-gradient(var(--color-main) var(--btn-ring-angle), transparent var(--btn-ring-angle));
+  opacity: 0;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
+}
+
+.btn-link__icon-img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.18s ease;
+}
+
+.btn-link__icon-img--out {
+  transform: translate(-50%, -50%);
+  opacity: 1;
+}
+
+.btn-link__icon-img--in {
+  transform: translate(-50%, -50%) translateX(-160%);
+  opacity: 0;
+}
+
+.btn-link--white {
+  color: var(--color-white);
+}
+
+.btn-link--white .btn-link__icon {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+/* --- works__link --- */
+.works__link {
+  display: block;
+  position: relative;
+}
+
+.works__card {
+  transition: background-color 0.3s var(--ease);
+}
+
+.works__card img {
+  transition: transform 0.4s var(--ease);
+}
+
+/* --- works__label --- */
+.works__label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: stretch;
+  transform: translateY(-50%);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+  z-index: 1;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* 親.works__labelのfont-weight:700を継承させない（英字は500まで） */
+.works__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  flex-shrink: 0;
+  font-family: var(--font-en);
+  font-weight: 500;
+  color: var(--color-white);
+  background: #16263b;
+  border-radius: 0;
+}
+
+.works__cat-text {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  color: var(--color-white);
+  background: var(--color-main);
+  border-radius: 0;
+}
+
+/* --- footer --- */
+.footer {
+  position: relative;
+  padding: 52px 0 0;
+  background: var(--color-white);
+  overflow: hidden; /* 200%幅の波線がはみ出さないようにクリップ */
+}
+
+.footer__top {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.footer__logo img {
+  width: 180px;
+}
+
+.footer__address,
+.footer__tel {
+  margin-top: 12px;
+  font-size: 1.3rem;
+  color: var(--color-gray);
+  /* address要素はブラウザ既定で斜体になるため解除する */
+  font-style: normal;
+}
+
+/* SP: フッターナビ非表示 */
+.footer__nav {
+  display: none;
+}
+
+.footer__nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer__nav-list + .footer__nav-list {
+  margin-top: 12px;
+}
+
+.footer__nav-list a {
+  display: block;
+  padding: 6px 0;
+}
+
+.footer__copy {
+  display: block;
+  margin-top: 24px;
+  padding-bottom: 24px;
+  font-family: var(--font-en);
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  text-align: left;
+}
+
+/* footer__wave-wrap: 2枚のimgを横並びにしてラッパーをアニメーション */
+.footer__wave-wrap {
+  display: flex;
+  animation: footerWaveScroll 20s linear infinite;
+}
+
+.footer__wave {
+  display: block;
+  flex-shrink: 0;
+  width: 200vw; /* SP: 各img=200vw、2枚で400vw、-50%移動=1枚分 */
+  max-width: none;
+  height: auto;
+}
+
+@keyframes footerWaveScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* --- loading / ページ遷移 --- */
+
+/* ページを覆う要素なので、JSが動く環境でしか表示しない。
+   さらに .is-first-visit が無い場合（2回目以降の遷移）も出さない */
+#loading {
+  display: none;
+}
+
+.js.is-first-visit #loading {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-main);
+  transition: opacity 0.4s var(--ease), visibility 0.4s;
+  /* main.js の読み込みに失敗した場合の保険 */
+  animation: loadingFailsafe 0.4s var(--ease) 2s forwards;
+}
+
+/* visibility も切らないと、透明のまま支援技術に読まれ続ける */
+#loading.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  animation: none;
+}
+
+@keyframes loadingFailsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js.is-first-visit #loading {
+    transition: none;
+    animation-duration: 0.01s;
+  }
+}
+
+
+#loading img {
+  /* 画面幅に対する比率で決め、上限を設ける */
+  width: min(78vw, 300px);
+}
+
+@media (min-width: 768px) {
+  #loading img {
+    width: 380px;
+  }
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  :root {
+    /* PCの左右余白。1300px付近まではvw連動、それ以上はmargin:autoのセンタリングに引き継がれる */
+    --container-pad: clamp(32px, 4vw, 56px);
+    /* .header__innerの左端に揃えるための余白（max-width+margin:autoと同等の計算） */
+    --pc-side: max(var(--container-pad), calc((100vw - var(--width-inner)) / 2));
+  }
+
+  body {
+    font-size: 1.6rem; /* PC基本：16px。16px以外のみ個別指定 */
+  }
+
+  /* スクロールしても常に画面上部に固定する */
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: var(--header-height-pc);
+  }
+
+  .header__logo img {
+    width: 220px; /* 1024px以上で大きくする（ファイル末尾） */
+  }
+
+  .menu-btn {
+    display: none;
+  }
+
+  .btn-link {
+    display: inline-flex;
+    width: auto;
+    margin-left: 0;
+    margin-right: 0;
+    justify-content: flex-start;
+  }
+
+  .btn-link__text-sp {
+    display: none;
+  }
+
+  .gnav {
+    position: static;
+    inset: auto;
+    display: block;
+    width: auto;
+    height: auto;
+    opacity: 1;
+    visibility: visible;
+    background: none;
+    overflow: visible;
+    transition: none;
+  }
+
+  /* PCではgnav内ロゴ非表示 */
+  .gnav__logo {
+    display: none;
+  }
+
+  .gnav__list {
+    flex-direction: row;
+    align-items: center;
+    gap: 24px;
+    padding: 0;
+  }
+
+  .gnav__list li {
+    border-bottom: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .gnav__list a {
+    padding: 0;
+    gap: 10px;
+  }
+
+  .gnav__list a::after {
+    display: none;
+  }
+
+  .gnav__label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .gnav__copy,
+  .gnav__foot {
+    display: none;
+  }
+
+  /* PC：お問い合わせをボタン化（白罫線・白矢印・CTAと同仕様のスライドアニメ） */
+  .gnav__item--contact > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px 8px 20px;
+    background: var(--color-main);
+    border-radius: 999px;
+    transition: background-color 0.3s var(--ease);
+  }
+
+  .gnav__item--contact > a:hover {
+    background: #0a4f9a;
+  }
+
+  .gnav__item--contact .gnav__label {
+    color: var(--color-white);
+    font-weight: 700;
+  }
+
+  /* PCのみ矢印アイコン表示（白罫線・白矢印） */
+  .gnav__list .gnav__contact-icon {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  /* hoverはPCのみ */
+  .gnav__list a:hover .gnav__label {
+    color: var(--color-main);
+  }
+
+  .gnav__item--contact > a:hover .gnav__label {
+    color: var(--color-white);
+  }
+
+  /* CTA：hoverでオーバーレイが薄くなり背景画像が透ける */
+  .cta__item:hover .cta__overlay {
+    opacity: 0.55;
+  }
+
+  /* NEWS一覧：背景バーが左から伸びる */
+  .news__item a:hover::before {
+    transform: scaleX(1);
+  }
+
+  /* 丸アイコン（詳しくみる／NEWS矢印）：丸が軽くせり出し、青リングが一周＋矢印スライド */
+  .btn-link:not(.cta__link):hover .btn-link__icon {
+    border-color: transparent;
+    transform: scale(1.08);
+  }
+
+  .news__item a:hover .btn-link__icon {
+    border-color: transparent;
+    transform: translateY(-50%) scale(1.08);
+  }
+
+  .btn-link:not(.cta__link):hover .btn-link__icon::before,
+  .news__item a:hover .btn-link__icon::before {
+    opacity: 1;
+    animation: btnLinkRing 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes btnLinkRing {
+    from { --btn-ring-angle: 0deg; }
+    to   { --btn-ring-angle: 360deg; }
+  }
+
+  .btn-link:not(.cta__link):hover .btn-link__icon-img--out,
+  .news__item a:hover .btn-link__icon-img--out {
+    transition-delay: 0s;
+    transform: translate(-50%, -50%) translateX(160%);
+    opacity: 0;
+  }
+
+  .btn-link:not(.cta__link):hover .btn-link__icon-img--in,
+  .news__item a:hover .btn-link__icon-img--in {
+    transition-delay: 0.08s;
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+
+  /* CTA：矢印スライドのみ（リングなし） */
+  .cta__item:hover .btn-link__icon-img--out {
+    transform: translate(-50%, -50%) translateX(160%);
+    opacity: 0;
+  }
+
+  .cta__item:hover .btn-link__icon-img--in {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+
+  /* gnav contact ボタン：CTA同仕様（矢印スライドのみ、リングなし） */
+  .gnav__item--contact > a:hover .btn-link__icon-img--out {
+    transform: translate(-50%, -50%) translateX(160%);
+    opacity: 0;
+  }
+
+  .gnav__item--contact > a:hover .btn-link__icon-img--in {
+    transform: translate(-50%, -50%) translateX(0);
+    opacity: 1;
+  }
+
+  main {
+    padding-top: var(--header-height-pc);
+  }
+
+  .section-head__en {
+    font-size: 5.2rem;
+  }
+
+  .section-head__ja {
+    font-size: 2.2rem;
+  }
+
+  .footer {
+    padding-top: 80px;
+  }
+
+  .footer__top {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .footer__nav {
+    display: block;
+    text-align: right;
+  }
+
+  .footer__nav-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 12px 32px;
+  }
+
+  .footer__nav-list a {
+    padding: 0;
+    font-size: 1.5rem;
+  }
+
+  .footer__nav-list a:hover {
+    color: var(--color-main);
+  }
+
+  .footer__copy {
+    font-size: 1.3rem;
+    text-align: right;
+  }
+
+  /* PC: 各img=100vw、2枚で200vw、-50%移動=1枚分 */
+  .footer__wave {
+    width: 100vw;
+  }
+
+  .gnav__wave {
+    width: 100vw;
+  }
+
+  /* works__link PCホバー：背景色 + イラスト拡大 */
+  .works__link:hover .works__card {
+    background-color: var(--color-bg-light);
+  }
+
+  .works__link:hover .works__card img {
+    transform: scale(1.06);
+  }
+
+  .works__num {
+    width: 36px;
+    font-size: 1.5rem;
+  }
+
+  .works__cat-text {
+    padding: 10px 18px;
+  }
+
+  .works__label {
+    font-size: 1.4rem;
+  }
+}
+
+/* スマホはhoverの代わりにactiveを使用 */
+@media (hover: none) {
+  .btn-link:active {
+    opacity: 0.7;
+  }
+}
+
+/* ===================================================
+  CTA（共通）
+  全ページで使用するため common.css で管理
+=================================================== */
+.cta {
+  position: relative;
+  padding: 96px 0 56px;
+  background:
+    url("../images/cta-wave.svg") top center / 200% auto no-repeat,
+    linear-gradient(to bottom, transparent 80px, var(--color-bg-blue) 80px);
+}
+
+.cta__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  padding: 0 16px;
+}
+
+.cta__item {
+  position: relative;
+  min-height: 280px;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.cta__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cta__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transition: opacity 0.4s var(--ease);
+}
+
+.cta__item--about .cta__overlay,
+.cta__item--contact .cta__overlay {
+  background: var(--color-main);
+}
+
+.cta__body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 24px;
+  color: var(--color-white);
+}
+
+.cta__left {
+  display: flex;
+  flex-direction: column;
+}
+
+.cta__title {
+  font-family: var(--font-en);
+  font-size: 2.2rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.cta__ja {
+  margin-top: 4px;
+  font-size: 1.3rem;
+}
+
+.cta__link {
+  margin-top: 20px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* SP: CONTACTのテキストのみ非表示、ABOUT USは表示 */
+.cta__text {
+  display: none;
+}
+
+.cta__item--about .cta__text {
+  display: block;
+  line-height: 1.8;
+}
+
+.cta__divider {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.cta__tel {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.cta__tel-label {
+  font-family: var(--font-en);
+  font-size: 1.3rem;
+  font-weight: 500;
+}
+
+.cta__tel-num {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.cta__hours {
+  margin-top: 8px;
+  font-size: 1.3rem;
+  opacity: 0.85;
+}
+
+@media (min-width: 768px) {
+  .cta__text {
+    display: block;
+    line-height: 1.8;
+  }
+
+  .cta {
+    padding: 140px 0 80px;
+    background:
+      url("../images/cta-wave.svg") top center / 100% auto no-repeat,
+      linear-gradient(to bottom, transparent 120px, var(--color-bg-blue) 120px);
+  }
+
+  .cta__list {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    max-width: var(--width-inner);
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .cta__body {
+    flex-direction: row;
+    align-items: center;
+    gap: 40px;
+    height: 100%;
+    padding: 56px;
+  }
+
+  .cta__left {
+    flex: 0 0 auto;
+  }
+
+  .cta__right {
+    flex: 1;
+  }
+
+  .cta__title {
+    font-size: 2.6rem;
+  }
+}
+
+/* ===================================================
+  ロゴ拡大（元サイトは220px）
+  - 1023px以下は220pxのまま。大きくするとメニューが折り返すため
+=================================================== */
+@media (min-width: 1024px) {
+  .header__logo img {
+    width: 280px;
+  }
+}

@@ -1,0 +1,4 @@
+# 公開確認中は検索エンジンに載せない（各ページの meta robots と同じ指定）
+# 本番切り替え後に、この3行を消す
+/*
+  X-Robots-Tag: noindex, nofollow

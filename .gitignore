@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+._*
+
+# エディタ
+.vscode/
+.idea/
+
+# Cloudflare（wrangler）
+.wrangler/
+.dev.vars
+node_modules/
+
+# Python
+__pycache__/

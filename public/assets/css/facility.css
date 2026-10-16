@@ -1,0 +1,191 @@
+/* ===================================================
+  facility.css
+  - 設備紹介ページ専用スタイル（モバイルファースト）
+=================================================== */
+
+/* --- 主要設備カード --- */
+.facility-equip__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px 16px;
+}
+
+.facility-equip__card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.facility-equip__photo {
+  flex: 0 0 120px;
+  border-radius: 8px;
+}
+
+.facility-equip__photo img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  border-radius: 8px;
+}
+
+.facility-equip__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.facility-equip__name {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.facility-equip__specs {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2px 14px;
+}
+
+.facility-equip__spec {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+/* 項目名は［］で囲む */
+.facility-equip__spec-label::before {
+  content: "[";
+}
+
+.facility-equip__spec-label::after {
+  content: "]";
+}
+
+.facility-equip__desc {
+  margin-top: 6px;
+  font-size: 1.2rem;
+  line-height: 1.7;
+}
+
+/* --- 保有設備一覧テーブル --- */
+.facility-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.facility-table {
+  width: 100%;
+  min-width: 480px;
+  border-collapse: collapse;
+  font-size: 1.4rem;
+}
+
+.facility-table th,
+.facility-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  line-height: 1.6;
+}
+
+.facility-table thead th {
+  background: var(--color-main);
+  color: var(--color-white);
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.facility-table thead th:first-child {
+  border-radius: 0;
+}
+
+.facility-table thead th:last-child {
+  border-radius: 0;
+}
+
+.facility-table tbody tr:nth-child(even) td {
+  background: var(--color-bg-blue);
+}
+
+.facility-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.facility-table th,
+.facility-table td {
+  white-space: nowrap;
+}
+
+.facility-table td:last-child {
+  text-align: center;
+}
+
+.table-scroll-hint {
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  margin-top: 10px;
+  letter-spacing: 0.05em;
+}
+
+@media (min-width: 768px) {
+  .table-scroll-hint {
+    display: none;
+  }
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .facility-equip__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px 20px;
+  }
+
+  .facility-equip__card {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .facility-equip__photo {
+    flex: none;
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  .facility-equip__photo img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+  }
+
+  .facility-equip__name {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+
+  .facility-equip__spec {
+    font-size: 1.4rem;
+  }
+
+  .facility-equip__desc {
+    font-size: 1.4rem;
+  }
+
+  .facility-table {
+    font-size: 1.6rem;
+  }
+
+  .facility-table th,
+  .facility-table td {
+    padding: 12px 20px;
+  }
+}

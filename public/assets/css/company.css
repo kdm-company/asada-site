@@ -1,0 +1,266 @@
+/* ===================================================
+  company.css
+  - 会社案内ページ専用スタイル
+=================================================== */
+
+/* --- ご挨拶 --- */
+.greeting__body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  line-height: 1.9;
+}
+
+.greeting__sig {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.greeting__sig-pos {
+  font-size: 1.4rem;
+}
+
+.greeting__sig-name {
+  font-family: "Yuji Syuku", serif;
+  font-size: 2.8rem;
+  font-weight: 400;
+  margin-top: 8px;
+  letter-spacing: 0.14em;
+}
+
+/* --- 企業理念 --- */
+.philosophy__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.philosophy__card {
+  padding: 24px 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+}
+
+.philosophy__item:last-child .philosophy__card {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.philosophy__watermark {
+  display: none;
+}
+
+.philosophy__en {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 1.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--color-main);
+  text-transform: uppercase;
+}
+
+.philosophy__ja {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.philosophy__desc {
+  margin-top: 0;
+  font-size: 1.3rem;
+  line-height: 1.9;
+}
+
+/* --- 会社概要 --- */
+.profile__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.profile__row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 0 24px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-border);
+  align-items: baseline;
+}
+
+.profile__row:first-child {
+  border-top: 1px solid var(--color-border);
+}
+
+.profile__label {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0;
+}
+
+.profile__value {
+  font-size: 1.3rem;
+  padding: 0;
+  line-height: 1.8;
+}
+
+.profile__clients {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.profile__clients li:not(:last-child)::after {
+  content: " / ";
+}
+
+/* --- 沿革 --- */
+.history__list {
+  position: relative;
+  padding-left: 32px;
+  list-style: none;
+}
+
+/* 縦ライン */
+.history__list::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--color-border);
+  transform: translateX(-50%);
+}
+
+.history__item {
+  position: relative;
+  padding-bottom: 28px;
+}
+
+.history__item:last-child {
+  padding-bottom: 0;
+}
+
+/* 丸：縦ラインと同じ left: 5px を基準に中央揃え */
+.history__item::before {
+  content: "";
+  position: absolute;
+  left: calc(-32px + 5px);
+  top: 4px;
+  width: 12px;
+  height: 12px;
+  background: var(--color-white);
+  border: 2px solid var(--color-main);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.history__date {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--color-main);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.history__event {
+  font-size: 1.3rem;
+  line-height: 1.8;
+}
+
+/* --- アクセス --- */
+.access__map {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* SP: 正方形 */
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--color-bg-blue);
+}
+
+.access__map iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .philosophy__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .philosophy__item:first-child .philosophy__card { border-top: none; }
+  .philosophy__item:last-child .philosophy__card  { border-bottom: none; }
+
+  .philosophy__card {
+    height: 100%;
+    padding: 36px 28px;
+    border: none;
+    background: var(--color-bg-blue);
+    border-radius: 16px;
+    box-sizing: border-box;
+  }
+
+  .profile__row {
+    grid-template-columns: 120px 1fr;
+  }
+
+  .profile__label {
+    font-size: 1.5rem;
+  }
+
+  .profile__value {
+    font-size: 1.5rem;
+  }
+
+  .history__list {
+    padding-left: 44px;
+  }
+
+  .history__list::before {
+    left: 6px;
+  }
+
+  .history__item {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 0 48px;
+    padding-bottom: 36px;
+  }
+
+  .history__item::before {
+    left: calc(-44px + 6px);
+    top: 5px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .history__date {
+    text-align: right;
+    font-size: 1.5rem;
+    margin-bottom: 0;
+    padding-top: 1px;
+  }
+
+  .history__event {
+    font-size: 1.5rem;
+  }
+
+  .access__map {
+    aspect-ratio: 16 / 6; /* PC: 横長 */
+    border-radius: 20px;
+  }
+}

@@ -1,0 +1,521 @@
+/* ===================================================
+  news.css
+  - 新着情報（一覧・記事）ページ専用スタイル（モバイルファースト）
+=================================================== */
+
+/* --- 一覧：記事カード --- */
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.news-card {
+  display: block;
+  padding: 20px 0;
+  /* 罫線は各カードの上辺＋リスト下辺で引く。:first-child だと絞り込みで
+     先頭が display:none になったとき最上部の線が消えるため */
+  border-top: 1px solid var(--color-border);
+  transition: opacity 0.2s var(--ease);
+}
+
+.news-card:hover {
+  opacity: 0.7;
+}
+
+.news-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.news-card__date {
+  font-family: var(--font-en);
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  letter-spacing: 0.05em;
+}
+
+.news-card__cat {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-main);
+  background: var(--color-bg-blue);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+}
+
+.news-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+.news-card__excerpt {
+  margin-top: 6px;
+  font-size: 1.3rem;
+  color: var(--color-gray);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- ページネーション --- */
+.news-pager {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 48px;
+}
+
+.news-pager__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  font-family: var(--font-en);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+.news-pager__item:hover,
+.news-pager__item.is-current {
+  background: var(--color-main);
+  color: var(--color-white);
+  border-color: var(--color-main);
+}
+
+/* --- 記事詳細 --- */
+.news-article__meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.news-article__date {
+  font-family: var(--font-en);
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  letter-spacing: 0.05em;
+}
+
+.news-article__cat {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-main);
+  background: var(--color-bg-blue);
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+}
+
+.news-article__title {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* 記事本文 */
+.news-article__body {
+  line-height: 2;
+}
+
+.news-article__body p + p {
+  margin-top: 1.6em;
+}
+
+.news-article__body h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--color-main);
+}
+
+.news-article__body h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-top: 32px;
+  margin-bottom: 12px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.news-article__body h3::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.15em;
+  width: 3px;
+  height: 1em;
+  background: var(--color-main);
+  border-radius: 1.5px;
+  opacity: 0.6;
+}
+
+.news-article__body img {
+  border-radius: 8px;
+  margin: 24px 0;
+}
+
+/* ===================================================
+  管理画面から挿入される埋め込み（動画・SNS等）
+  幅を超えて崩れないよう、本文側で受け止める
+=================================================== */
+
+/* 画像・動画・iframe すべてを本文幅に収める */
+.news-article__body :where(img, video, iframe, embed, object, canvas, svg) {
+  max-width: 100%;
+  height: auto;
+}
+
+/* YouTube/Vimeo など iframe 埋め込み。
+   WPの「埋め込みブロック」は .wp-block-embed__wrapper で包まれる */
+.news-article__body :where(iframe, video),
+.news-article__body .wp-block-embed__wrapper > iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  height: auto;
+  margin: 24px 0;
+  border: 0;
+  border-radius: 8px;
+  background: #000;
+}
+
+/* 動画ファイル直挿し（wp-block-video）*/
+.news-article__body :where(figure.wp-block-video, .wp-block-embed) {
+  margin: 24px 0;
+}
+
+.news-article__body figure video {
+  margin: 0;
+}
+
+/* 縦長動画やSNS埋め込みなど、16:9でないものは比率を維持させる */
+.news-article__body .wp-block-embed.is-provider-instagram iframe,
+.news-article__body .wp-block-embed.is-provider-twitter iframe,
+.news-article__body .wp-block-embed.is-provider-x iframe {
+  aspect-ratio: auto;
+  background: none;
+}
+
+/* WPの responsive embed（比率クラス付き）はパディング方式で来る */
+.news-article__body .wp-embed-aspect-4-3 .wp-block-embed__wrapper > iframe { aspect-ratio: 4 / 3; }
+.news-article__body .wp-embed-aspect-1-1 .wp-block-embed__wrapper > iframe { aspect-ratio: 1 / 1; }
+.news-article__body .wp-embed-aspect-9-16 .wp-block-embed__wrapper > iframe { aspect-ratio: 9 / 16; }
+
+/* 埋め込みのキャプション */
+.news-article__body figcaption {
+  margin-top: 8px;
+  font-size: 1.2rem;
+  color: var(--color-gray);
+  line-height: 1.7;
+  text-align: center;
+}
+
+/* 表を貼られても横に溢れさせない */
+.news-article__body .wp-block-table,
+.news-article__body figure.wp-block-table {
+  overflow-x: auto;
+  margin: 24px 0;
+}
+
+.news-article__body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.3rem;
+}
+
+.news-article__body :where(th, td) {
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  text-align: left;
+  line-height: 1.7;
+}
+
+.news-article__body th {
+  background: var(--color-bg-blue);
+  font-weight: 700;
+}
+
+/* 長いURLなどで横スクロールが出ないように */
+.news-article__body :where(p, li, h2, h3) {
+  overflow-wrap: anywhere;
+}
+
+/* 整形済みテキスト・コードは内側でスクロール */
+.news-article__body pre {
+  overflow-x: auto;
+  padding: 16px;
+  background: var(--color-bg-blue);
+  border-radius: 8px;
+  font-size: 1.3rem;
+  line-height: 1.7;
+}
+
+.news-article__body ul,
+.news-article__body ol {
+  padding-left: 1.8em;
+  margin: 1em 0;
+}
+
+.news-article__body ul {
+  list-style: disc;
+}
+
+.news-article__body ol {
+  list-style: decimal;
+}
+
+.news-article__body li {
+  line-height: 1.8;
+  margin-bottom: 6px;
+}
+
+.news-article__body li::marker {
+  color: var(--color-main);
+}
+
+/* 前後の記事リンク */
+.news-article__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--color-border);
+}
+
+.news-article__nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-bg-blue);
+  border-radius: 10px;
+  font-size: 1.3rem;
+  color: var(--color-text);
+  transition: background 0.2s var(--ease);
+}
+
+.news-article__nav-link:hover {
+  background: var(--color-border);
+}
+
+.news-article__nav-label {
+  font-family: var(--font-en);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--color-main);
+  flex-shrink: 0;
+}
+
+.news-article__nav-title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+/* 一覧に戻るリンク */
+.news-article__back {
+  margin-top: 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* --- ニュースサイドバー --- */
+.ns-block {
+  background: var(--color-white);
+  border-radius: 16px;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.07);
+  padding: 18px;
+}
+
+.ns-block + .ns-block {
+  margin-top: 14px;
+}
+
+.ns-block__head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 11px;
+  border-bottom: 2px solid var(--color-main);
+  margin-bottom: 4px;
+}
+
+.ns-block__icon {
+  width: 15px;
+  height: 15px;
+  color: var(--color-main);
+  flex-shrink: 0;
+}
+
+.ns-block__title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--color-text);
+}
+
+.ns-block__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ns-block__item {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.ns-block__item:last-child {
+  border-bottom: none;
+}
+
+.ns-block__link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 2px;
+  font-size: 1.3rem;
+  color: var(--color-text);
+  transition: color 0.2s;
+  line-height: 1.4;
+  gap: 6px;
+}
+
+.ns-block__link:hover,
+.ns-block__link.is-active {
+  color: var(--color-main);
+}
+
+.ns-block__count {
+  font-family: var(--font-en);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-gray);
+  flex-shrink: 0;
+}
+
+/* 最新記事 */
+.ns-recent__list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 6px;
+}
+
+.ns-recent__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: opacity 0.2s;
+}
+
+.ns-recent__link:hover {
+  opacity: 0.7;
+}
+
+.ns-recent__thumb {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ns-recent__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ns-recent__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.ns-recent__title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 1.2rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.ns-recent__date {
+  display: block;
+  font-family: var(--font-en);
+  font-size: 1.1rem;
+  color: var(--color-gray);
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .page-sidebar {
+    position: static;
+  }
+
+  .page-body__inner--news {
+    grid-template-columns: 260px 1fr;
+    gap: 48px;
+  }
+
+  .news-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 24px;
+    align-items: baseline;
+  }
+
+  .news-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 0;
+  }
+
+  .news-card__title {
+    font-size: 1.6rem;
+  }
+
+  .news-article__title {
+    font-size: 2.4rem;
+  }
+
+  .news-article__nav {
+    flex-direction: row;
+  }
+
+  .news-article__nav-link {
+    flex: 1;
+  }
+}

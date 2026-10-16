@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "asada-site",
+  "compatibility_date": "2026-10-01",
+  // 静的ファイルだけを配信する（Worker のスクリプトは持たない）。
+  // 公開されるのは public/ 配下だけ。
+  "assets": {
+    "directory": "public",
+    // 存在しないURLは public/404.html を 404 で返す
+    "not_found_handling": "404-page"
+  }
+}

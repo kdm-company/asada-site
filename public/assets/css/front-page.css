@@ -1,0 +1,568 @@
+/* ===================================================
+  front-page.css
+  - トップページ専用スタイル（モバイルファースト）
+=================================================== */
+
+/* --- hero --- */
+.hero {
+  position: relative;
+  min-height: 420px;
+  padding: 32px 20px 56px;
+  background: var(--color-white);
+}
+
+.hero__img-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* 背景の青い菱形。45度回転した正方形の上端は top -(√2-1)/2×辺長 の位置に来るため、
+   その分だけtopを下げ、ヒーロー上辺（＝ヘッダー下端）より上にはみ出さないようにする */
+.hero::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  --diamond: 120vw;
+  width: var(--diamond);
+  height: var(--diamond);
+  background: var(--color-bg-blue);
+  left: -60vw;
+  top: calc(var(--diamond) * 0.2072);
+  transform: rotate(45deg);
+}
+
+.hero__box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 38%;
+  z-index: 0;
+  border-radius: 20px;
+  background: #fdfaf5;
+}
+
+/* max-widthのリセット上書きが必要。width:130%を有効にする */
+.hero__img {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: 0;
+  display: block;
+  width: 130%;
+  max-width: none;
+  height: auto;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__text {
+  position: relative;
+}
+
+.hero__catch {
+  width: auto;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: normal;
+  color: var(--color-main);
+}
+
+.hero__lead {
+  display: none;
+}
+
+/* --- 新着情報ティッカー（SPはヒーローの下、PCはヒーロー内に重ねる） --- */
+/* z-index: ヒーロー画像（z-index:1）より前面に出す */
+.hero-ticker {
+  /* 文字が流れる速さ（px/秒）。JSが所要時間の算出に読み取る */
+  --ticker-speed: 25;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: -24px 20px 0;
+  padding: 12px 18px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.hero-ticker__label {
+  flex-shrink: 0;
+  font-family: var(--font-en);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  color: var(--color-main);
+}
+
+/* 記事を重ねて配置し、アクティブな1件のみ表示 */
+.hero-ticker__list {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  height: 1.8em;
+}
+
+.hero-ticker__item {
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
+}
+
+.hero-ticker__item.is-active {
+  visibility: visible;
+}
+
+.hero-ticker__item a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 100%;
+}
+
+/* SPは表示エリアが狭いため日付は出さない */
+.hero-ticker__date {
+  display: none;
+  flex-shrink: 0;
+  font-family: var(--font-en);
+  font-size: 1.2rem;
+  letter-spacing: 0.04em;
+  color: var(--color-gray);
+}
+
+/* タイトルを右から左へ流す窓 */
+.hero-ticker__track {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  height: 100%;
+}
+
+.hero-ticker__title {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  white-space: nowrap;
+  font-size: 1.3rem;
+  line-height: 1;
+  transform: translate(100%, -50%);
+}
+
+/* アニメーションはJSが animation ショートハンドで直接設定する
+   （所要時間を本文の実測幅から算出するため） */
+@keyframes heroTickerFlow {
+  from { transform: translate(100%, -50%); }
+  to   { transform: translate(-100%, -50%); }
+}
+
+/* 視差軽減時はJSがティッカーを起動しないので、1件目を静止表示にする */
+@media (prefers-reduced-motion: reduce) {
+  .hero-ticker__title {
+    position: static;
+    transform: none;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* --- section inner --- */
+.service__inner,
+.works__inner,
+.news__inner {
+  padding-top: 56px;
+  padding-bottom: 56px;
+}
+
+/* --- service --- */
+.service__title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: left;
+}
+
+/* font-sizeはbody(14px)から継承 */
+.service__text {
+  margin-top: 16px;
+  line-height: 1.9;
+}
+
+.service .btn-link {
+  margin-top: 24px;
+}
+
+.diagonal-wrap {
+  position: relative;
+}
+
+/* --- works --- */
+/* font-sizeはbody(14px)から継承 */
+.works__lead {
+  line-height: 1.9;
+}
+
+.works__head-btn {
+  display: none;
+}
+
+.works__list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 16px;
+  margin-top: 40px;
+}
+
+.works__item {
+  position: relative;
+}
+
+.works__card {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--color-white);
+  border: 8px solid var(--color-works-border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.works__card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.works .btn-link {
+  margin-top: 32px;
+}
+
+/* --- factory --- */
+.factory {
+  padding-right: 16px;
+}
+
+.factory img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 0 20px 20px 0;
+}
+
+/* --- news --- */
+.news {
+  position: relative;
+  z-index: 1;
+  margin: -40px 16px 0 16px;
+  background: var(--color-white);
+  border-radius: 20px 0 0 0;
+}
+
+.news__inner {
+  max-width: none;
+  margin: 0;
+  padding-top: 40px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-bottom: 56px;
+}
+
+.news__head-btn {
+  display: none;
+}
+
+.news__bottom-btn {
+  margin-top: 24px;
+}
+
+.news__list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.news__item a {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 16px 56px 16px 20px;
+  overflow: hidden;
+  background: var(--color-bg-blue);
+  border-radius: 15px;
+  transition: box-shadow 0.3s var(--ease);
+}
+
+.news__item a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--color-main);
+  opacity: 0.06;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease);
+}
+
+.news__date,
+.news__cat,
+.news__title {
+  position: relative;
+  z-index: 1;
+}
+
+.news__date {
+  font-size: 1.2rem;
+  color: #6b7785;
+}
+
+.news__cat {
+  padding: 2px 12px;
+  font-size: 1.3rem;
+  color: var(--color-main);
+  background: var(--color-white);
+  border-radius: 999px;
+}
+
+/* 1行で収まらない場合は末尾を省略 */
+.news__title {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.news__arrow.btn-link__icon {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+/* CTA styles → common.css へ移管 */
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .hero {
+    min-height: 640px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  /* 大画面では菱形の最大サイズを制限（topはSPと同じ計算式で追従する） */
+  .hero::before {
+    --diamond: min(120vw, 1680px);
+    left: max(-840px, -60vw);
+  }
+
+  .factory {
+    padding-right: var(--pc-side);
+  }
+
+  .factory img {
+    height: 360px;
+    border-radius: 0 28px 28px 0;
+  }
+
+  .news {
+    margin: -28px var(--pc-side) 0 0;
+    border-radius: 28px 0 0 0;
+  }
+
+  .hero__box {
+    left: calc(var(--pc-side) + 320px);
+    right: 0;
+    border-radius: 32px 0 0 32px;
+  }
+
+  /* 画面幅が狭まっても縮みすぎないよう、vwの半分ペースで縮小
+     （1300px→850px / 1440px→920px が基準） */
+  .hero__img {
+    left: auto;
+    right: 0;
+    bottom: auto;
+    top: 20px;
+    width: clamp(560px, calc(50vw + 200px), 1040px);
+    max-width: none;
+    transform: none;
+  }
+
+  .hero__inner {
+    max-width: var(--width-outer);
+    height: 640px;
+    margin: 0 auto;
+    padding: 100px var(--container-pad) 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .hero__text {
+    max-width: calc(var(--catch-size) * 12.7);
+  }
+
+  .hero__catch {
+    font-size: var(--catch-size);
+  }
+
+  .hero__lead {
+    display: block;
+    margin-top: 28px;
+    font-size: 1.8rem;
+    line-height: 1.8;
+  }
+
+  /* PCはヒーロー内に重ね、テキスト左端に揃える */
+  .hero-area {
+    position: relative;
+    /* キャッチの文字サイズ。テキスト幅・ティッカー幅もこれに連動させ、
+       どの画面幅でも「鉄は、未だ見ぬ「欲しい」」の12文字で改行される */
+    --catch-size: min(4.4rem, 3.4vw);
+  }
+
+  .hero-ticker {
+    --ticker-speed: 45;
+    position: absolute;
+    left: var(--pc-side);
+    bottom: 140px;
+    z-index: 3;
+    width: calc(var(--catch-size) * 12.7);
+    margin: 0;
+    gap: 18px;
+    padding: 14px 24px;
+    border-color: transparent;
+    box-shadow: 0 4px 24px rgba(11, 92, 171, 0.12);
+  }
+
+  .hero-ticker__label {
+    font-size: 1.7rem;
+  }
+
+  .hero-ticker__date {
+    display: block;
+    font-size: 1.3rem;
+  }
+
+  .hero-ticker__title {
+    font-size: 1.4rem;
+  }
+
+  .service__inner,
+  .works__inner,
+  .news__inner {
+    padding: 88px var(--container-pad);
+  }
+
+  .section-head {
+    text-align: left;
+    margin-bottom: 32px;
+  }
+
+  .service__title {
+    font-size: 3.2rem;
+  }
+
+  .service__text {
+    margin-top: 20px;
+    max-width: 720px;
+  }
+
+  .works__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+  }
+
+  .works__head {
+    flex: 0 0 400px;
+  }
+
+  .works__lead {
+    max-width: 360px;
+  }
+
+  .works__head-btn {
+    display: inline-flex;
+    margin-top: 32px;
+  }
+
+  .works__bottom-btn {
+    display: none;
+  }
+
+  .works__list {
+    flex: 0 1 640px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 40px 24px;
+    margin-top: 0;
+  }
+
+  /* PCはcard内画像を80%程度に縮小 */
+  .works__card img {
+    width: 80%;
+    height: 80%;
+  }
+
+  .news__inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 48px;
+    padding-left: 100px;
+    padding-right: 0;
+  }
+
+  .news__head {
+    flex: 0 0 240px;
+    padding: 0;
+  }
+
+  .news__head-btn {
+    display: inline-flex;
+    margin-top: 32px;
+  }
+
+  .news__bottom-btn {
+    display: none;
+  }
+
+  .news__list {
+    flex: 1;
+    margin-top: 0;
+  }
+
+  .news__item a {
+    padding: 20px 56px 20px 28px;
+    border-radius: 999px;
+  }
+
+  .news__title {
+    width: auto;
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* CTA PC styles → common.css */
+}

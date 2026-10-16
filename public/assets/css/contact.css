@@ -1,0 +1,543 @@
+/* ===================================================
+  contact.css
+  - お問い合わせページ専用スタイル（モバイルファースト）
+=================================================== */
+
+/* --- イントロ --- */
+.contact-intro {
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.contact-intro__text {
+  line-height: 2;
+  margin-bottom: 24px;
+}
+
+/* --- 返信目安などの注意書き --- */
+.contact-note {
+  margin-bottom: 24px;
+  padding: 20px 22px;
+  background: var(--color-bg-blue);
+  border-radius: 12px;
+  font-size: 1.3rem;
+  line-height: 1.9;
+}
+
+.contact-note li {
+  position: relative;
+  padding-left: 18px;
+}
+
+.contact-note li + li {
+  margin-top: 8px;
+}
+
+.contact-note li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.75em;
+  width: 6px;
+  height: 6px;
+  background: var(--color-main);
+  border-radius: 50%;
+}
+
+.contact-note strong {
+  font-weight: 700;
+  color: var(--color-main);
+}
+
+@media (min-width: 768px) {
+  .contact-note {
+    padding: 24px 28px;
+    font-size: 1.4rem;
+  }
+}
+
+.contact-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px 24px;
+  background: var(--color-bg-blue);
+  border-radius: 12px;
+}
+
+.contact-info__icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  background: var(--color-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+}
+
+.contact-info__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+}
+
+.contact-info__body {
+  flex: 1;
+}
+
+.contact-info__tel {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.contact-info__tel-label {
+  font-family: var(--font-en);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-main);
+}
+
+.contact-info__tel-num {
+  font-family: var(--font-en);
+  font-size: 2.4rem;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+.contact-info__hours {
+  font-size: 1.3rem;
+  color: var(--color-gray);
+}
+
+/* --- フォーム --- */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* バッジは2文字を必ず1行で保つ */
+.form-label__required,
+.form-label__optional {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 2px 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.form-label__required {
+  background: var(--color-main);
+  color: var(--color-white);
+}
+
+.form-label__optional {
+  background: var(--color-border);
+  color: var(--color-gray);
+}
+
+/* iOS zoom 防止: font-size は 16px (1.6rem) 以上 */
+.form-input,
+.form-select,
+.form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: var(--font-base);
+  font-size: 1.6rem;
+  color: var(--color-text);
+  background: var(--color-white);
+  border: 1.5px solid var(--color-border);
+  border-radius: 8px;
+  transition: border-color 0.2s var(--ease);
+  appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  border-color: var(--color-main);
+}
+
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238a96a3' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 180px;
+  line-height: 1.8;
+}
+
+/* カスタムチェックボックス */
+.form-agree {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.form-agree input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.form-agree__box {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  background: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+  margin-top: 1px;
+  position: relative;
+}
+
+.form-agree__box::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 9px;
+  border-right: 2.5px solid transparent;
+  border-bottom: 2.5px solid transparent;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transition: border-color 0.2s;
+}
+
+.form-agree input[type="checkbox"]:checked ~ .form-agree__box {
+  background: var(--color-main);
+  border-color: var(--color-main);
+}
+
+.form-agree input[type="checkbox"]:checked ~ .form-agree__box::after {
+  border-right-color: var(--color-white);
+  border-bottom-color: var(--color-white);
+}
+
+.form-agree input[type="checkbox"]:focus-visible ~ .form-agree__box {
+  outline: 2px solid var(--color-main);
+  outline-offset: 2px;
+}
+
+.form-agree a {
+  color: var(--color-main);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* 送信ボタン */
+/* CF7は送信ボタンの隣にスピナーを出す。
+   これもflexの子として数えられ、ボタンが左へずれるため
+   絶対配置にして中央寄せの計算から外す */
+.form-submit {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.form-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 48px;
+  background: var(--color-main);
+  color: var(--color-white);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+}
+
+.form-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.form-btn:active {
+  transform: translateY(0);
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .form-group {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 24px;
+  }
+
+  /* 最長ラベル「お問い合わせ種別」＋バッジが1行で収まる幅 */
+  .form-label {
+    flex: 0 0 190px;
+    padding-top: 10px;
+  }
+
+  .form-input,
+  .form-select,
+  .form-textarea {
+    width: auto;
+    flex: 1;
+  }
+
+  /* チェックボックス行は中央寄せ（ラベル列を持たないため） */
+  .form-group:has(.form-agree) {
+    justify-content: center;
+  }
+
+  .form-btn {
+    font-size: 1.6rem;
+    padding: 18px 64px;
+  }
+}
+
+/* ===================================================
+  Contact Form 7 の出力に合わせた調整
+
+  CF7は入力欄を <span class="wpcf7-form-control-wrap"> で包み、
+  同意チェックは label > input + span.wpcf7-list-item-label という
+  静的版とは異なる構造で出力する。ここで見た目を合わせる。
+=================================================== */
+
+/* CF7は <form> に独自クラスを付けるため、ショートコードの html_class で
+   .contact-form を付与している。隠しフィールドの fieldset は
+   flexの子として余白を生むので隠す */
+.wpcf7-form .hidden-fields-container,
+.wpcf7-form > .screen-reader-response {
+  display: none;
+}
+
+.wpcf7-form-control-wrap {
+  display: block;
+  width: 100%;
+}
+
+.wpcf7-form-control-wrap .form-input,
+.wpcf7-form-control-wrap .form-select,
+.wpcf7-form-control-wrap .form-textarea {
+  width: 100%;
+}
+
+/* rows指定に関係なく高さを揃える */
+.form-textarea {
+  height: 180px;
+}
+
+/* --- 同意チェックボックス --- */
+.form-group--agree {
+  align-items: center;
+  justify-content: center;
+}
+
+.form-group--agree .wpcf7-form-control-wrap,
+.form-group--agree .wpcf7-acceptance,
+.form-group--agree .wpcf7-list-item {
+  display: inline-block;
+  width: auto;
+  margin: 0;
+}
+
+.form-group--agree label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* 標準のチェックボックスは隠し、ラベル側に四角を描く */
+.form-group--agree input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.wpcf7-list-item-label {
+  position: relative;
+  padding-left: 30px;
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.wpcf7-list-item-label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translateY(-50%);
+  background: var(--color-white);
+  border: 2px solid var(--color-border);
+  border-radius: 4px;
+  transition: background 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+/* チェック記号 */
+.wpcf7-list-item-label::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 50%;
+  width: 5px;
+  height: 9px;
+  border-right: 2.5px solid transparent;
+  border-bottom: 2.5px solid transparent;
+  transform: translateY(-65%) rotate(45deg);
+  transition: border-color 0.2s var(--ease);
+}
+
+input[type="checkbox"]:checked + .wpcf7-list-item-label::before {
+  background: var(--color-main);
+  border-color: var(--color-main);
+}
+
+input[type="checkbox"]:checked + .wpcf7-list-item-label::after {
+  border-right-color: var(--color-white);
+  border-bottom-color: var(--color-white);
+}
+
+input[type="checkbox"]:focus-visible + .wpcf7-list-item-label::before {
+  outline: 2px solid var(--color-main);
+  outline-offset: 2px;
+}
+
+.wpcf7-list-item-label a {
+  color: var(--color-main);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* --- 送信ボタン --- */
+/* input要素には擬似要素を置けないため、矢印は背景画像で描く */
+.form-btn {
+  padding-right: 68px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='4' y1='12' x2='19' y2='12'/%3E%3Cpolyline points='13 6 19 12 13 18'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 28px center;
+  background-size: 18px 18px;
+}
+
+/* --- エラー表示 --- */
+.wpcf7-not-valid-tip {
+  display: block;
+  margin-top: 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #c8342b;
+}
+
+.wpcf7-form-control.wpcf7-not-valid {
+  border-color: #c8342b;
+}
+
+.wpcf7-response-output {
+  margin: 24px 0 0 !important;
+  padding: 14px 18px !important;
+  border-width: 1.5px !important;
+  border-radius: 8px;
+  font-size: 1.4rem;
+  line-height: 1.8;
+}
+
+.wpcf7 form.sent .wpcf7-response-output {
+  border-color: var(--color-main) !important;
+  background: var(--color-bg-blue);
+  color: var(--color-main);
+}
+
+.wpcf7 form.invalid .wpcf7-response-output,
+.wpcf7 form.failed .wpcf7-response-output {
+  border-color: #c8342b !important;
+  background: #fdf3f2;
+  color: #c8342b;
+}
+
+.form-submit .wpcf7-spinner {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin: 0;
+  transform: translateY(-50%);
+}
+
+@media (min-width: 768px) {
+  /* ラベル列の右側を入力欄が埋める */
+  .form-group > .wpcf7-form-control-wrap {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+  }
+
+  /* 同意行はラベル列を持たないので中央のまま */
+  .form-group--agree > .wpcf7-form-control-wrap {
+    flex: 0 0 auto;
+    width: auto;
+  }
+}
+
+/* --- メールアドレス（フォームの代わりに表示） --- */
+/* フォームを置かないので、下の区切り線は出さない */
+.contact-intro {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.contact-info + .contact-info {
+  margin-top: 12px;
+}
+
+/* 電話番号と同じ書体だと375px幅に収まらないため、スマホではラベルの下の行に小さめに出す */
+.contact-info__tel--mail {
+  flex-wrap: wrap;
+}
+
+.contact-info__tel-num.contact-info__mail {
+  font-size: 1.7rem;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .contact-info__tel-num.contact-info__mail {
+    font-size: 2.2rem;
+  }
+}

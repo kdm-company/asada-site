@@ -1,0 +1,44 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  # PR ではリンク確認だけ走らせる。デプロイは main への push のみ
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: リンク切れの確認
+        run: python3 -I scripts/check_links.py public
+
+      # Cloudflare の認証情報が未登録のうちは、デプロイを飛ばしてリンク確認だけ行う。
+      # 必須ステップにすると、登録前の push がすべて失敗扱いになり、本当の異常と見分けがつかないため。
+      - name: Cloudflare の認証情報を確認
+        id: cf
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          if [ -n "$TOKEN" ] && [ -n "$ACCOUNT" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=デプロイを飛ばしました::CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID が未登録です。リンク確認は成功しています。Settings → Secrets and variables → Actions に登録すると、次回から公開されます。"
+          fi
+
+      - name: Cloudflare Workers へデプロイ
+        if: steps.cf.outputs.ready == 'true' && github.event_name != 'pull_request'
+        run: npx --yes wrangler@4 deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
