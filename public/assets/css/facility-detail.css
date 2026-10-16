@@ -1,0 +1,89 @@
+/* ===================================================
+  facility-detail.css
+  - 設備の詳細ページ（/facility/<slug>/）専用スタイル（モバイルファースト）
+=================================================== */
+
+.facility-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.facility-detail__photo {
+  margin: 0;
+}
+
+.facility-detail__photo img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* 元の写真が小さいもの（CADMAC の画面）は枠に収める */
+.facility-detail__photo--small img {
+  object-fit: contain;
+  background: var(--color-bg-blue);
+}
+
+.facility-detail__specs {
+  margin-bottom: 20px;
+}
+
+.facility-detail__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 2;
+}
+
+.facility-detail__gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.facility-detail__gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.facility-detail__back {
+  margin-top: 40px;
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .facility-detail {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .facility-detail__photo {
+    flex: 0 0 52%;
+  }
+
+  .facility-detail__body {
+    flex: 1;
+  }
+
+  .facility-detail__gallery {
+    gap: 16px;
+  }
+
+  .facility-detail__gallery--col2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .facility-detail__gallery--col3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

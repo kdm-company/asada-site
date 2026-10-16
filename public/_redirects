@@ -26,8 +26,8 @@
 /company/profile /company/#profile 301
 /company/history /company/#history 301
 /company/history/ /company/#history 301
-/company/recruit/ /recruit/ 301
-/company/recruit /recruit/ 301
+/company/recruit/ /company/ 301
+/company/recruit /company/ 301
 /facilities/ /facility/ 301
 /facilities /facility/ 301
 /info /news/ 301

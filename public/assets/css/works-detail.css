@@ -1,0 +1,67 @@
+/* ===================================================
+  works-detail.css
+  - 事例紹介の詳細ページ（/works/<id>/）専用スタイル（モバイルファースト）
+  - 写真の枚数ごとに並べ方を変え、最後の段に穴が空かないようにする
+=================================================== */
+
+.works-detail__text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  line-height: 2;
+}
+
+.works-detail__gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* 製品の形が切れないよう、写真は枠の中に収める */
+.works-detail__gallery img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--color-bg-blue);
+  border-radius: 10px;
+}
+
+.works-detail__back {
+  margin-top: 40px;
+}
+
+/* ===================================================
+  PC（768px以上）
+=================================================== */
+@media (min-width: 768px) {
+  .works-detail__gallery {
+    gap: 16px;
+  }
+
+  .works-detail__gallery--single {
+    max-width: 720px;
+  }
+
+  .works-detail__gallery--col2,
+  .works-detail__gallery--lead2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .works-detail__gallery--col3,
+  .works-detail__gallery--lead3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* 奇数枚のときは1枚目を横いっぱいに */
+  .works-detail__gallery--lead2 li:first-child,
+  .works-detail__gallery--lead3 li:first-child {
+    grid-column: 1 / -1;
+  }
+
+  .works-detail__gallery--lead2 li:first-child img,
+  .works-detail__gallery--lead3 li:first-child img {
+    aspect-ratio: 16 / 9;
+  }
+}

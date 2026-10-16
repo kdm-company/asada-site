@@ -566,3 +566,8 @@
 
   /* CTA PC styles → common.css */
 }
+
+/* --- 赤のアクセント①：キャッチコピーの「欲しい」 --- */
+.hero__catch-accent {
+  color: var(--color-accent);
+}

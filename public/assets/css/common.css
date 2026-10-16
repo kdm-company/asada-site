@@ -7,6 +7,7 @@
 :root {
   --color-main: #0b5cab;
   --color-sub: #ffd23f;
+  --color-accent: #e90000; /* 青の補色として少しだけ使う赤（現行サイトの赤）。使う場所は3か所に限る */
   --color-text: #1a1a1a;
   --color-bg-blue: #f5fafe; /* 薄水色：ニュースbg/worksボーダー/CTAbg等に統一 */
   --color-bg-light: var(--color-bg-blue);
@@ -1127,4 +1128,9 @@ main {
   .header__logo img {
     width: 280px;
   }
+}
+
+/* --- 赤のアクセント②：トップ「製品事例のご紹介」の番号 --- */
+.works__num {
+  background: var(--color-accent);
 }
