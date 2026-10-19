@@ -587,3 +587,63 @@
     top: calc(var(--header-height-pc) + 32px);
   }
 }
+
+/* ===================================================
+  NEWS帯：最新3件を同時に並べる（2026-10-19。1件ずつ流す動きはやめた）
+  - 中身は src/index.js が note と自社のお知らせから最新3件を差し込む
+  - 下端の位置はそのままで、行が増えると上に伸びる
+=================================================== */
+.hero-ticker {
+  border-radius: 20px;
+}
+
+.hero-ticker__list {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.hero-ticker__item {
+  position: static;
+  visibility: visible;
+}
+
+.hero-ticker__item + .hero-ticker__item {
+  border-top: 1px solid var(--color-border);
+}
+
+.hero-ticker__item a {
+  height: auto;
+  padding: 6px 0;
+}
+
+.hero-ticker__track {
+  height: auto;
+}
+
+.hero-ticker__title {
+  position: static;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .hero-ticker__item a:hover .hero-ticker__title {
+    color: var(--color-main);
+  }
+}
+
+@media (min-width: 768px) {
+  /* 上端を1件表示のときと同じ位置に保ち、増えた行の分は下に伸ばす（本文と重ならないように） */
+  .hero-ticker {
+    bottom: 68px;
+  }
+
+  /* 新着情報：長いタイトル（note の記事など）で一覧が画面の外まで広がらないようにする */
+  .news__list {
+    min-width: 0;
+  }
+}

@@ -52,6 +52,7 @@ python3 -I scripts/check_links.py public
 `#note-feed`（新着情報）と `#note-ticker`（NEWS帯）を書き換える。
 
 - note の最新3件と、`index.html` に書いた自社のお知らせを日付順に混ぜ、新着情報は4件・NEWS帯は3件まで出す
+- NEWS帯は3件を同時に縦に並べる（2026-10-19 から。1件ずつ流す動きはやめ、帯の `id="heroTicker"` を外して main.js の処理を止めている）
 - note の記事は別タブで開く。ラベルは「note」
 - 取り込み結果は1時間キャッシュ（失敗時は5分）。**workers.dev の確認用URLではキャッシュが効かず、表示のたびに RSS を取りに行く**（本番ドメインに切り替えると効く）
 - RSS が取れないときは `index.html` の一覧のまま表示する
