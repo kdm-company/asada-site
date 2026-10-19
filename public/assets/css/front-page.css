@@ -571,3 +571,19 @@
 .hero__catch-accent {
   color: var(--color-accent);
 }
+
+/* ===================================================
+  PC（768px以上）の調整
+=================================================== */
+@media (min-width: 768px) {
+  /* SERVICE：本文の幅を区切らず、右側に余白を残さない（左揃えはそのまま） */
+  .service__text {
+    max-width: none;
+  }
+
+  /* WORKS：左の見出しを、セクションを読み終えるまでヘッダーのすぐ下に固定する（KDMの事業内容と同じ） */
+  .works__head {
+    position: sticky;
+    top: calc(var(--header-height-pc) + 32px);
+  }
+}
