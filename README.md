@@ -14,7 +14,8 @@
 | `public/_redirects` | 旧サイト（WordPress）の URL → 新ページの転送表 |
 | `public/_headers` | 公開確認中の noindex ヘッダー（切り替え後に消す） |
 | `public/404.html` | 存在しない URL のときに返すページ |
-| `wrangler.jsonc` | Cloudflare Workers（静的配信）の設定 |
+| `wrangler.jsonc` | Cloudflare Workers の設定。トップ（/）だけ Worker を通し、ほかは静的配信 |
+| `src/index.js` | トップの「新着情報」とNEWS帯に note の最新記事を差し込む Worker |
 | `scripts/check_links.py` | サイト内リンク・画像の参照先がそろっているかの確認 |
 | `scripts/build_works_detail.py` | 事例の詳細ページ36件を作る（一度きりの生成用。以後は HTML を直接直してよい） |
 | `scripts/build_facility_detail.py` | 設備カード9枚と設備の詳細ページ9件を作る（同上） |
@@ -45,7 +46,21 @@ python3 -I scripts/check_links.py public
 
 プレビューは `/Users/yu-ki/Desktop/サイト制作/.claude/launch.json` の `asada-trace`（port 8096）。Desktop 配下は直接配信できないので、`rsync -a --delete public/ /tmp/asada-trace-preview/` で写してから開く。転送表と 404 はこのプレビューでは動かないので、Workers の URL で確かめる。
 
+## note の最新記事（トップの新着情報・NEWS帯）
+
+平原こうや公式サイトと同じ組み方。`src/index.js` がトップを返すときに note の RSS（https://note.com/asada_tekko/rss）を取り込み、
+`#note-feed`（新着情報）と `#note-ticker`（NEWS帯）を書き換える。
+
+- note の最新3件と、`index.html` に書いた自社のお知らせを日付順に混ぜ、新着情報は4件・NEWS帯は3件まで出す
+- note の記事は別タブで開く。ラベルは「note」
+- 取り込み結果は1時間キャッシュ（失敗時は5分）。**workers.dev の確認用URLではキャッシュが効かず、表示のたびに RSS を取りに行く**（本番ドメインに切り替えると効く）
+- RSS が取れないときは `index.html` の一覧のまま表示する
+- 動作確認は応答ヘッダー `X-Note-Feed`：`rss`＝差し込み成功／`static`＝RSS 取得失敗で静的一覧（GET で見る。HEAD は Worker を通らない）
+- 手元で動かすときは `npx wrangler@4 dev`。プレビューは launch.json の `asada-worker`（port 8797、`/tmp/asada-worker-dev` に写してから起動）
+
 ## 新着記事を足すとき
+
+note の記事は自動で出るので、ここで書くのは自社のお知らせ（サイト内の記事）だけ。
 
 静的サイトなので、次の箇所を手で更新する。
 

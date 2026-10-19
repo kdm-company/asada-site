@@ -2,10 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "asada-site",
   "compatibility_date": "2026-10-01",
-  // 静的ファイルだけを配信する（Worker のスクリプトは持たない）。
-  // 公開されるのは public/ 配下だけ。
+  // トップ（/）だけ Worker を通し、note の最新記事を「新着情報」に差し込む（src/index.js）。
+  // それ以外は public/ の静的ファイルをそのまま返す。公開されるのは public/ 配下だけ。
+  "main": "src/index.js",
   "assets": {
     "directory": "public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/"],
     // 存在しないURLは public/404.html を 404 で返す
     "not_found_handling": "404-page"
   }
